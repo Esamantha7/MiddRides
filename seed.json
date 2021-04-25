@@ -1,0 +1,72 @@
+// array of objects that contain the Name of location, coordinates 
+[
+  {
+    "Name of Location": "Athletic Center",
+    "lat": "44.00431152582654",
+    "long": "-73.17791110680493",
+    "requesters": "0"
+  },
+
+  {
+    "Name of Location": "ADK",
+    "lat": "44.0103207642722",
+    "long": "-73.18017654748563",
+    "requesters": "0"
+  },
+
+  {
+    "Name of Location": "R Lot",
+    "lat": "44.008950614302286",
+    "long": "-73.18386530592346",
+    "requesters": "0"
+  },
+
+  {
+    "Name of Location": "Robert A Jones’ 59 House",
+    "lat": "44.00838047874966",
+    "long": "-73.1805998077546",
+    "requesters": "0"
+  },
+
+  {
+    "Name of Location": "KDR",
+    "lat": "44.00611286915639",
+    "long": "-73.17063681758097",
+    "requesters": "0"
+  },
+
+  {
+    "Name of Location": "T Lot",
+    "lat": "44.0028523253328",
+    "long": "-73.17895954547902",
+    "requesters": "0"
+  },
+  
+  {
+    "Name of Location": "McCullough",
+    "lat": "44.00855645516175",
+    "long": "-73.17694809020692",
+    "requesters": "0"
+  },
+  
+  {
+    "Name of Location": "E Lot",
+    "lat": "44.01209373692472",
+    "long": "-73.17693538847725",
+    "requesters": "0"
+  },
+
+  {
+    "Name of Location": "Q Lot",
+    "lat":"44.0054832669845" ,
+    "long":"-73.17523917130994",
+    "requesters": "0"
+  },
+
+  {
+    "Name of Location": "Frog Hollow",
+    "lat":"44.01298696790806" ,
+    "long":"-73.16945731507846",
+    "requesters": "0"
+  }
+]

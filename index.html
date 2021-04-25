@@ -1,59 +1,176 @@
-<!-- <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>repl.it</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    <script src="script.js"></script>
-  </body>
-</html> -->
+
+<link rel="stylesheet" href="style.css">
 
 <!doctype html>
 <html>
-  <head>
-    <title>Google Maps Example</title>
-    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.19.0.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>PubNub Google Maps Tutorial - Live Device Location</h1>
-      <div id="map-canvas" style="width:600px;height:400px"></div>
-    </div>
+<head>
+	<title>Google Maps Example</title>
+	<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.19.0.min.js">
+	</script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
+</head>
 
-    <script>
-    window.lat = 37.7850;
-    window.lng = -122.4383;
+<body>
+<h1 style="text-align: center; font-weight: bold;">Track MiddRides</h1>
+<div class="container">
+	<div class = "row">
+    <div class= "col-12 col-md-8">
+      <div id="map-canvas" style="width:600px;height:400px;"></div>
+    </div>
+    <div class= "col-6 col-md-4">
+    	<label for="location">Choose a location:</label>
+        <select id="locations" onchange="listQ()">
+          <option value="Athletic Center">Athletic Center</option>
+          <option value="ADK">ADK</option>
+          <option value="R Lot">R Lot</option>
+          <option value="Robert A Jones’ 59 House">Robert A Jones’ 59 House</option>
+          <option value="KDR">KDR</option>
+          <option value="T Lot">T Lot</option>
+          <option value="McCullough">McCullough</option>
+          <option value="E Lot">E Lot</option>
+          <option value="Q Lot">Q Lot</option>
+          <option value="Frog Hollow">Frog Hollow</option>
+        </select>
+        <br>
+        <button id="requesters"
+                onclick="myFunction()"
+        >Add a request </button>
+      <p id="demo"></p>
+      <br>
+    <div class="driver">
+        <h4> Bus Info </h4>
+
+      </div> 
+  </div> </div>
+    
+      
+    </div>
+    </div>
+</body>
+   
+
+    <script type="text/javascript">
+    var list_locations = {
+      "Athletic Center":{
+          "lat": "44.00431152582654",
+          "long": "-73.17791110680493",
+          "requesters": "0"} ,
+      "ADK":{
+          "lat": "44.0103207642722",
+          "long": "-73.18017654748563",
+          "requesters": "0"
+        },
+      "R Lot": {
+          "lat": "44.008950614302286",
+          "long": "-73.18386530592346",
+          "requesters": "0"
+      },
+      "Robert A Jones’ 59 House":{
+          "lat": "44.00838047874966",
+          "long": "-73.1805998077546",
+          "requesters": "0"
+      },
+      "KDR":{
+          "lat": "44.00611286915639",
+          "long": "-73.17063681758097",
+          "requesters": "0"
+      },
+      "T Lot":{
+          "lat": "44.0028523253328",
+          "long": "-73.17895954547902",
+          "requesters": "0"
+      },
+      "McCullough":{
+          "lat": "44.00855645516175",
+          "long": "-73.17694809020692",
+          "requesters": "0"
+      },
+      "E Lot":{
+          "lat": "44.01209373692472",
+          "long": "-73.17693538847725",
+          "requesters": "0"
+      },
+      "Q Lot":{
+          "lat":"44.0054832669845" ,
+          "long":"-73.17523917130994",
+          "requesters": "0"
+      },
+      "Frog Hollow": {
+          "lat":"44.01298696790806" ,
+          "long":"-73.16945731507846",
+          "requesters": "0"
+    }
+};
+
+    //
+    function myFunction() {
+        var myLocation = document.getElementById("locations").value;
+        console.log(myLocation);
+        var place = list_locations[myLocation]
+        var numReqs = parseInt(place.requesters) + 1
+        list_locations[myLocation].requesters = numReqs + ""
+        //console.log(numReqs);
+    }
+    
+    //window.lat = 44.010270;
+    //window.lng = -73.180039;
+    let lastIndex = true;
+    var current_loc = document.getElementById('locations').value;
+    console.log(current_loc)
+    if(lastIndex){
+      window.lat= 44.00431152582654
+      window.lng = -73.17791110680493
+      lastIndex = false
+    }
+    var listQ = function(){ 
+      var e = document.getElementById("locations").value;
+      document.getElementById("demo").innerHTML = "You selected: " + e;
+      current_loc = e;
+      console.log(current_loc)
+      var selected_location = list_locations[current_loc]
+      console.log(selected_location)
+      window.lat = parseFloat(selected_location.lat);
+      window.lng = parseFloat(selected_location.long);
+      lat = window.lat
+      lng = window.lng
+      console.log(window.lat)
+      //get location name, match it to list_locations, and then edit window.lat and window.lng
+    }
+    //var lat = 44.010270;
+    //var lng = -73.180039;
+    var destination_lat = 44.010532
+    var destination_lng = -73.172207
+    var map;
+    var mark;
+    var lineCoords = [];
 
     function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(updatePosition);
-        }
-      
-        return null;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(updatePosition);
+    }
+      return null;
     };
-
+    
     function updatePosition(position) {
       if (position) {
+        console.log(position)
         window.lat = position.coords.latitude;
         window.lng = position.coords.longitude;
       }
     }
-    
-    setInterval(function(){updatePosition(getLocation());}, 10000);
-      
+
+    //setInterval(function(){updatePosition(getLocation());}, 10000);
     function currentLocation() {
       return {lat:window.lat, lng:window.lng};
     };
 
-    var map;
-    var mark;
-
+    // Initialize callback for the Google Maps API to call
     var initialize = function() {
+      /*var current = currentLocation()
+      console.log(current)
+      let lat = current.lat
+      let lng = current.lng*/
       map  = new google.maps.Map(document.getElementById('map-canvas'), {center:{lat:lat,lng:lng},zoom:12});
       mark = new google.maps.Marker({position:{lat:lat, lng:lng}, map:map});
     };
@@ -61,27 +178,51 @@
     window.initialize = initialize;
 
     var redraw = function(payload) {
+      /*var current = currentLocation()
+      let lat = current.lat
+      let lng = current.lng
       lat = payload.message.lat;
-      lng = payload.message.lng;
-
+      lng = payload.message.lng;*/
+      //console.log("lat ", lat, " lng ", lng)
       map.setCenter({lat:lat, lng:lng, alt:0});
       mark.setPosition({lat:lat, lng:lng, alt:0});
+      /*
+      lineCoords.push(new google.maps.LatLng(lat, lng));
+
+      var lineCoordinatesPath = new google.maps.Polyline({
+        path: lineCoords,
+        geodesic: true,
+        strokeColor: '#2E10FF'
+      });
+      
+      lineCoordinatesPath.setMap(map);*/
     };
 
-    var pnChannel = "map2-channel";
+    var pnChannel = "Channel-rgoj33d09";
 
+    // Subscribe the PubNub library to this channel and attach the redraw function
     var pubnub = new PubNub({
-      publishKey:   'pub-c-af3eec52-bd90-484d-b1df-2cb5a4e6cf63',
-      subscribeKey: 'sub-c-5dce67de-a46f-11eb-96f4-7e87b170c68c'
+      publishKey:   'pub-c-cb6f2812-e059-43cc-b280-c14bd1f031f0',
+      subscribeKey: 'sub-c-003e95d2-a46d-11eb-96f4-7e87b170c68c'
     });
 
     pubnub.subscribe({channels: [pnChannel]});
     pubnub.addListener({message:redraw});
 
     setInterval(function() {
-      pubnub.publish({channel:pnChannel, message:currentLocation()});
-    }, 5000);
+      pubnub.publish({
+        channel:pnChannel, 
+        message:currentLocation()},
+        function(status, response) {
+          //console.log(status.error);
+          //console.log(response);
+        });
+        //{lat:window.lat+0.000001, lng:window.lng+0.000001 }});
+    }, 1000);
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=YOUR_GOOGLE_MAPS_KEY&callback=initialize"></script>
-  </body>
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBs_ziOo5LHBUWyHW7_7mH9wWZoA1yLwqs&callback=initialize"></script>
+
+  </body> 
 </html>
