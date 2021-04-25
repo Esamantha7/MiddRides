@@ -1,28 +1,31 @@
-
 <link rel="stylesheet" href="style.css">
 
 <!doctype html>
 <html>
+
 <head>
 	<title>Google Maps Example</title>
 	<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.19.0.min.js">
+
 	</script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" />
 </head>
 
 <body>
-<h1 style="text-align: center; font-weight: bold;">Track MiddRides</h1>
-<div class="container">
-	<div class = "row">
-    <div class= "col-12 col-md-8">
-      <div id="map-canvas" style="width:600px;height:400px;"></div>
-    </div>
-    <div class= "col-6 col-md-4">
-    	<label for="location">Choose a location:</label>
+	<h1 style="text-align: center; font-weight: bold;">Where is MiddRides?</h1>
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-md-8">
+				<div id="map-canvas" style="width:600px;height:400px;"></div>
+			</div>
+			<div class="col-6 col-md-4">
+				<h3> Are You A Passenger ?</h3>
+				<h4> Request Pick Up</h4>
+				<label for="location">Choose a location:</label>
         <select id="locations" onchange="listQ()">
-          <option value="Athletic Center">Athletic Center</option>
           <option value="ADK">ADK</option>
+          <option value="Athletic Center">Athletic Center</option>
           <option value="R Lot">R Lot</option>
           <option value="Robert A Jones’ 59 House">Robert A Jones’ 59 House</option>
           <option value="KDR">KDR</option>
@@ -37,11 +40,8 @@
                 onclick="myFunction()"
         >Add a request </button>
       <p id="demo"></p>
+      <p id="eta"></p>
       <br>
-    <div class="driver">
-        <h4> Bus Info </h4>
-
-      </div> 
   </div> </div>
     
       
@@ -52,54 +52,63 @@
 
     <script type="text/javascript">
     var list_locations = {
-      "Athletic Center":{
-          "lat": "44.00431152582654",
-          "long": "-73.17791110680493",
-          "requesters": "0"} ,
       "ADK":{
           "lat": "44.0103207642722",
           "long": "-73.18017654748563",
-          "requesters": "0"
-        },
+          "requesters": "0",
+          "eta": "4"},
+      "Athletic Center":{
+          "lat": "44.00431152582654",
+          "long": "-73.17791110680493",
+          "requesters": "0",
+          "eta": "6"} ,
       "R Lot": {
           "lat": "44.008950614302286",
           "long": "-73.18386530592346",
-          "requesters": "0"
+          "requesters": "0",
+          "eta": "3"
       },
       "Robert A Jones’ 59 House":{
           "lat": "44.00838047874966",
           "long": "-73.1805998077546",
-          "requesters": "0"
+          "requesters": "0",
+          "eta": "4"
       },
       "KDR":{
           "lat": "44.00611286915639",
           "long": "-73.17063681758097",
-          "requesters": "0"
+          "requesters": "0",
+          "eta": "4"
       },
       "T Lot":{
           "lat": "44.0028523253328",
           "long": "-73.17895954547902",
-          "requesters": "0"
+          "requesters": "0",
+          "eta": "4"
       },
       "McCullough":{
           "lat": "44.00855645516175",
           "long": "-73.17694809020692",
-          "requesters": "0"
+          "requesters": "0",
+          "eta": "2"
       },
       "E Lot":{
           "lat": "44.01209373692472",
           "long": "-73.17693538847725",
-          "requesters": "0"
+          "requesters": "0",
+          "eta": "3"
       },
       "Q Lot":{
           "lat":"44.0054832669845" ,
           "long":"-73.17523917130994",
-          "requesters": "0"
+          "requesters": "0",
+          "eta": "5"
       },
       "Frog Hollow": {
           "lat":"44.01298696790806" ,
           "long":"-73.16945731507846",
-          "requesters": "0"
+          "requesters": "0",
+          "eta": "7"
     }
 };
 
@@ -119,8 +128,8 @@
     var current_loc = document.getElementById('locations').value;
     console.log(current_loc)
     if(lastIndex){
-      window.lat= 44.00431152582654
-      window.lng = -73.17791110680493
+      window.lat= parseFloat(44.0103207642722)
+      window.lng = parseFloat(-73.18017654748563)
       lastIndex = false
     }
     var listQ = function(){ 
@@ -135,12 +144,9 @@
       lat = window.lat
       lng = window.lng
       console.log(window.lat)
+      document.getElementById("eta").innerHTML = "ETA: " + selected_location.eta;
       //get location name, match it to list_locations, and then edit window.lat and window.lng
     }
-    //var lat = 44.010270;
-    //var lng = -73.180039;
-    var destination_lat = 44.010532
-    var destination_lng = -73.172207
     var map;
     var mark;
     var lineCoords = [];
@@ -171,8 +177,8 @@
       console.log(current)
       let lat = current.lat
       let lng = current.lng*/
-      map  = new google.maps.Map(document.getElementById('map-canvas'), {center:{lat:lat,lng:lng},zoom:12});
-      mark = new google.maps.Marker({position:{lat:lat, lng:lng}, map:map});
+      map  = new google.maps.Map(document.getElementById('map-canvas'), {center:{lat:lat,lng:lng},zoom:14});
+      mark = new google.maps.Marker({position:{lat:lat, lng:lng}, map:map, icon:'brown_markerA.png'});
     };
 
     window.initialize = initialize;
@@ -184,8 +190,36 @@
       lat = payload.message.lat;
       lng = payload.message.lng;*/
       //console.log("lat ", lat, " lng ", lng)
-      map.setCenter({lat:lat, lng:lng, alt:0});
+      map.setCenter({lat:parseFloat(44.008950614302286), lng:parseFloat(-73.18386530592346), alt:0});
       mark.setPosition({lat:lat, lng:lng, alt:0});
+
+      
+      var infowindow = new google.maps.InfoWindow();
+
+      var marker, key;
+
+      for(var key in list_locations){ //for (i = 0; i < list_locations.length; i++) {
+        var loc = list_locations[key]
+
+        if (loc.requesters > 0){
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(loc.lat, loc.long),
+            map: map
+          });
+          google.maps.event.addListener(marker, 'click', (function(marker, key) {
+          return function() {
+            let req = list_locations[key].requesters+ " requesters @ " + key
+            infowindow.setContent(req);
+            infowindow.open(map, marker);
+          }
+        })(marker, key) );
+        
+        }
+
+        
+      }
+    
+    
       /*
       lineCoords.push(new google.maps.LatLng(lat, lng));
 
